@@ -12,10 +12,12 @@
     "streaming"
   ],
   "author": "TedMANNERs <mannersofted@gmail.com>",
-  "contributors": [{
-    "name": "BinaryTENSHi",
-    "email": "binarytenshi@gmail.com"
-  }],
+  "contributors": [
+    {
+      "name": "BinaryTENSHi",
+      "email": "binarytenshi@gmail.com"
+    }
+  ],
   "license": "ISC",
   "dependencies": {
     "express": "^4.13.4",
@@ -28,6 +30,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^6.3.3",
+    "babel-eslint": "^5.0.0",
     "babel-preset-es2015": "^6.5.0",
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.5.0",
