@@ -1,76 +1,84 @@
 const gulp = require("gulp");
+const del = require("del");
+const sourcemaps = require("gulp-sourcemaps");
+const babel = require("gulp-babel");
+
 const source = require("vinyl-source-stream");
+const buffer = require("vinyl-buffer");
+
+const browserSync = require("browser-sync");
 const browserify = require("browserify");
 const babelify = require("babelify");
+
 const less = require("gulp-less");
-const packageInfo = require("./package.json");
-const browserSync = require("browser-sync");
-const sourcemaps = require("gulp-sourcemaps");
-const buffer = require("vinyl-buffer");
 const postcss = require("gulp-postcss");
 const autoprefixer = require("autoprefixer");
 
-const reload = browserSync.reload;
+const nodemon = require("gulp-nodemon");
 
-gulp.task("build-js", function() {
-  return browserify({
-    entries: packageInfo.paths.app_client,
+const pkg = require("./package.json");
+
+gulp.task("clean", () =>
+  del([pkg.paths.bin_path])
+);
+
+gulp.task("build-js", () =>
+  browserify({
+    entries: pkg.paths.src_client,
     debug: true
   })
-    .on("error", function(err) {
-      console.error(err);
-      this.emit("end");
-    })
-    .transform(babelify.configure({
-      presets: ["es2015", "react", "stage-0"]
-    }))
+    .transform(babelify)
     .bundle()
-    .pipe(source(packageInfo.dest.app_js))
+    .pipe(source(pkg.paths.bin_client))
     .pipe(buffer())
     .pipe(sourcemaps.init({ loadMaps: true }))
     .pipe(sourcemaps.write("./"))
-    .pipe(gulp.dest(packageInfo.dest.dist_js))
-    .pipe(reload({
-      stream: true
-    }));
-});
+    .pipe(gulp.dest(pkg.paths.content_path))
+    .on("end", browserSync.reload)
+);
 
-gulp.task("build-css", function() {
-  const processors = [autoprefixer({
-    browsers: ["last 2 versions"]
-  })];
+const processors = [autoprefixer({
+  browsers: ["last 2 versions"]
+})];
 
-  return gulp.src("./src/client/less/*.less")
+gulp.task("build-css", () =>
+  gulp.src(pkg.paths.src_less)
     .pipe(less({
-      paths: ["./src/client/less"]
+      paths: [pkg.paths.src_less]
     }))
-    .on("error", function(err) {
-      console.error(err);
-      this.emit("end");
-    })
     .pipe(postcss(processors))
-    .pipe(gulp.dest(packageInfo.dest.dist_css))
-    .pipe(browserSync.stream());
+    .pipe(gulp.dest(pkg.paths.content_path))
+    .pipe(browserSync.stream())
+);
+
+gulp.task("build-server", () =>
+  gulp.src(pkg.paths.src_server)
+    .pipe(sourcemaps.init())
+    .pipe(babel())
+    .pipe(sourcemaps.write("./"))
+    .pipe(gulp.dest(pkg.paths.bin_path))
+);
+
+gulp.task("copy-html", () =>
+  gulp.src(pkg.paths.src_html)
+    .pipe(gulp.dest(pkg.paths.bin_path))
+);
+
+gulp.task("run-server", ["build-js", "build-css", "build-server", "copy-html"], () => {
+  nodemon({
+    script: pkg.paths.bin_path + pkg.paths.bin_server,
+    ext: "js",
+    watch: ["./bin/"]
+  });
 });
 
-gulp.task("copy-server", function() {
-  return gulp.src("./src/server/index.js")
-    .pipe(gulp.dest(packageInfo.dest.dist_server));
-});
-
-gulp.task("copy-views", function() {
-  return gulp.src("./src/server/*.html")
-    .pipe(gulp.dest(packageInfo.dest.dist_server));
-});
-
-gulp.task("watch", function() {
-  gulp.watch(["src/client/**/*.js", "src/**/*.jsx"], ["build-js"]);
+gulp.task("watch", () => {
+  gulp.watch(["src/client/**/*.js", "src/client/**/*.jsx"], ["build-js"]);
   gulp.watch(["src/client/less/*.less"], ["build-css"]);
-  gulp.watch(["src/server/index.js"], ["copy-server"]);
-  gulp.watch(["src/server/*.html"], ["copy-views"]);
+  gulp.watch(["src/server/**/*.js"], ["build-server"]);
 });
 
-gulp.task("browser-sync", function() {
+gulp.task("browser-sync", () => {
   browserSync({
     proxy: {
       target: "http://localhost:5000"
@@ -79,4 +87,8 @@ gulp.task("browser-sync", function() {
   });
 });
 
-gulp.task("default", ["build-js", "build-css", "browser-sync", "copy-server", "copy-views", "watch"]);
+gulp.task("default", [
+  "run-server",
+  "browser-sync",
+  "watch"
+]);
