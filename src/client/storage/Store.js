@@ -1,4 +1,4 @@
-import update from "react-addons-update";
+// import update from "react-addons-update";
 import { compose, createStore } from "redux";
 import DevTools from "../components/DevTools.jsx";
 
