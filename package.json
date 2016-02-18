@@ -51,13 +51,14 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "paths": {
-    "bin_path": "./bin/",
-    "content_path": "./bin/content/",
+    "path_bin": "./bin/",
+    "path_content": "./bin/content/",
+    "path_html": "./bin/views/",
     "src_client": "./src/client/app.js",
     "bin_client": "app.js",
     "src_less": "./src/client/less/*.less",
-    "src_server": "./src/server/index.js",
-    "bin_server": "index.js",
-    "src_html": "./src/server/*.html"
+    "src_server": "./src/server/server.js",
+    "bin_server": "server.js",
+    "src_html": "./src/server/views/*.html"
   }
 }

@@ -19,7 +19,7 @@ const nodemon = require("gulp-nodemon");
 const pkg = require("./package.json");
 
 gulp.task("clean", () =>
-  del([pkg.paths.bin_path])
+  del([pkg.paths.path_bin])
 );
 
 gulp.task("build-js", () =>
@@ -33,7 +33,7 @@ gulp.task("build-js", () =>
     .pipe(buffer())
     .pipe(sourcemaps.init({ loadMaps: true }))
     .pipe(sourcemaps.write("./"))
-    .pipe(gulp.dest(pkg.paths.content_path))
+    .pipe(gulp.dest(pkg.paths.path_content))
     .on("end", browserSync.reload)
 );
 
@@ -47,7 +47,7 @@ gulp.task("build-css", () =>
       paths: [pkg.paths.src_less]
     }))
     .pipe(postcss(processors))
-    .pipe(gulp.dest(pkg.paths.content_path))
+    .pipe(gulp.dest(pkg.paths.path_content))
     .pipe(browserSync.stream())
 );
 
@@ -56,17 +56,17 @@ gulp.task("build-server", () =>
     .pipe(sourcemaps.init())
     .pipe(babel())
     .pipe(sourcemaps.write("./"))
-    .pipe(gulp.dest(pkg.paths.bin_path))
+    .pipe(gulp.dest(pkg.paths.path_bin))
 );
 
 gulp.task("copy-html", () =>
   gulp.src(pkg.paths.src_html)
-    .pipe(gulp.dest(pkg.paths.bin_path))
+    .pipe(gulp.dest(pkg.paths.path_html))
 );
 
 gulp.task("run-server", ["build-js", "build-css", "build-server", "copy-html"], () => {
   nodemon({
-    script: pkg.paths.bin_path + pkg.paths.bin_server,
+    script: pkg.paths.path_bin + pkg.paths.bin_server,
     ext: "js",
     watch: ["./bin/"]
   });
