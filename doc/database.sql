@@ -13,6 +13,7 @@ CREATE TABLE tag (
 );
 
 CREATE TABLE track_tag (
+  "id" UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   "track_id" UUID REFERENCES track(id),
   "tag_id" UUID REFERENCES tag(id)
 );
