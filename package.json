@@ -60,7 +60,7 @@
     "src_client": "./src/client/app.js",
     "bin_client": "app.js",
     "src_less": "./src/client/less/*.less",
-    "src_server": "./src/server/server.js",
+    "src_server": "./src/server/**/*.js",
     "bin_server": "server.js",
     "src_html": "./src/server/views/*.html"
   }
