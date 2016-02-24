@@ -11,6 +11,10 @@
     "audio",
     "streaming"
   ],
+  "repository": {
+   "type": "git",
+   "url": "https://github.com/TedMANNERs/PandjedFortissimo.git"
+  },
   "author": "TedMANNERs <mannersofted@gmail.com>",
   "contributors": [
     {
