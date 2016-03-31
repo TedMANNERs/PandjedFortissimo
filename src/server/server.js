@@ -10,6 +10,14 @@ app.get("/", (req, res) => {
   res.sendFile(`${__dirname}/views/index.html`);
 });
 
+app.get("/search", (req, res) => {
+  res.sendFile(`${__dirname}/views/index.html`);
+});
+
+app.get("/upload", (req, res) => {
+  res.sendFile(`${__dirname}/views/index.html`);
+});
+
 app.use("/api/", Api());
 
 const port = Config.ServerPort() || 5000;
