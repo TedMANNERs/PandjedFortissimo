@@ -10,29 +10,29 @@ export default () => {
       links: [
         {
           rel: "version",
-          href: "/api/1.0"
+          href: "/api/v1.0"
         }
       ]
     });
   });
 
-  router.get("/1.0", (req, res) => {
+  router.get("/v1.0", (req, res) => {
     res.json({
       links: [
         {
           rel: "track",
-          href: "/api/1.0/tracks"
+          href: "/api/v1.0/tracks"
         },
         {
           rel: "tags",
-          href: "/api/1.0/tags"
+          href: "/api/v1.0/tags"
         }
       ]
     });
   });
 
-  router.use("/1.0/tracks", Tracks());
-  router.use("/1.0/tags", Tags());
+  router.use("/v1.0/tracks", Tracks());
+  router.use("/v1.0/tags", Tags());
 
   return router;
 };

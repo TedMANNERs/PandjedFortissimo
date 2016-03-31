@@ -4,6 +4,7 @@
   },
   "database": {
     "host": "localhost",
+    "port": 5050,
     "user": "user",
     "password": "password",
     "database": "database"
