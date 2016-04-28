@@ -1,6 +1,6 @@
 import { Router } from "express";
-import Tracks from "./Tracks.js";
-import Tags from "./Tags.js";
+import TracksRoute from "./TracksRoute.js";
+import TagsRoute from "./TagsRoute.js";
 
 export default () => {
   const router = Router();
@@ -31,8 +31,8 @@ export default () => {
     });
   });
 
-  router.use("/v1.0/tracks", Tracks());
-  router.use("/v1.0/tags", Tags());
+  router.use("/v1.0/tracks", TracksRoute());
+  router.use("/v1.0/tags", TagsRoute());
 
   return router;
 };

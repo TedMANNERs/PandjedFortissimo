@@ -30,7 +30,7 @@ class TrackRepository {
           return console.error("error running query", queryErr);
         }
 
-        return callback(result.rows);
+        return callback(result.rows[0]);
       });
     });
   }

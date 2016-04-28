@@ -1,6 +1,6 @@
 import express from "express";
 import Config from "./Config.js";
-import Api from "./routes/api/Api.js";
+import ApiRoute from "./routes/api/ApiRoute.js";
 
 const app = express();
 
@@ -18,7 +18,7 @@ app.get("/upload", (req, res) => {
   res.sendFile(`${__dirname}/views/index.html`);
 });
 
-app.use("/api/", Api());
+app.use("/api/", ApiRoute());
 
 const port = Config.ServerPort() || 5000;
 app.listen(port, () => {

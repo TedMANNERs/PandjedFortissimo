@@ -1,13 +1,13 @@
 import Database from "../database/Database.js";
 
-class TagRepository {
-  getAll(callback) {
+class TrackTagRepository {
+  getTrackIdsByTagId(id, callback) {
     Database.connect((err, client, done) => {
       if (err) {
         return console.error("error fetching client from pool", err);
       }
 
-      return client.query("SELECT * FROM tag", (queryErr, result) => {
+      return client.query("SELECT track_id FROM track_tag where tag_id=$1", [id], (queryErr, result) => {
         done();
         if (queryErr) {
           return console.error("error running query", queryErr);
@@ -18,22 +18,22 @@ class TagRepository {
     });
   }
 
-  getById(id, callback) {
+  getTagIdsByTrackId(id, callback) {
     Database.connect((err, client, done) => {
       if (err) {
         return console.error("error fetching client from pool", err);
       }
 
-      return client.query("SELECT * FROM tag where id=$1", [id], (queryErr, result) => {
+      return client.query("SELECT tag_id FROM track_tag where track_id=$1", [id], (queryErr, result) => {
         done();
         if (queryErr) {
           return console.error("error running query", queryErr);
         }
 
-        return callback(result.rows[0]);
+        return callback(result.rows);
       });
     });
   }
 }
 
-export default TagRepository;
+export default TrackTagRepository;
