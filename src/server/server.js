@@ -1,9 +1,11 @@
 import express from "express";
+import bodyParser from "body-parser";
 import Config from "./Config.js";
 import ApiRoute from "./routes/api/ApiRoute.js";
 
 const app = express();
 
+app.use(bodyParser.json());
 app.use("/content", express.static(`${__dirname}/content`));
 
 app.get("/", (req, res) => {

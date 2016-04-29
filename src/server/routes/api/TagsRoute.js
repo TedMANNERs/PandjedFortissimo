@@ -22,6 +22,17 @@ export default () => {
     });
   });
 
+  router.post("/", (req, res) => {
+    try {
+      tagRepository.insert(req.body.tag, (tagId) => {
+        res.status(201).location(`/api/v1.0/tags/${tagId}`).send("Created");
+      });
+    }
+    catch (err) {
+      res.status(400).send("Bad Request");
+    }
+  });
+
   router.get("/:id", (req, res) => {
     tagRepository.getById(req.params.id, (tag) => {
       tag.tracks = { rel: "tracks", href: `/api/v1.0/tags/${tag.id}/tracks` };
@@ -29,6 +40,30 @@ export default () => {
         tag
       });
     });
+  });
+
+  router.delete("/:id", (req, res) => {
+    tagRepository.delete(req.params.id, (tagId) => {
+      if (!tagId) {
+        return res.status(404).send("Not Found");
+      }
+
+      return res.status(204).location(`/api/v1.0/tags/${tagId}`).send("No Content");
+    });
+  });
+
+  router.put("/:id", (req, res) => {
+    try {
+      tagRepository.update(req.body.tag, req.params.id, (tagId) => {
+        if (!tagId) {
+          return res.status(404).send("Not Found");
+        }
+        return res.status(204).location(`/api/v1.0/tags/${tagId}`).send("No Content");
+      });
+    }
+    catch (err) {
+      res.status(400).send("Bad Request");
+    }
   });
 
   router.get("/:id/tracks", (req, res) => {
